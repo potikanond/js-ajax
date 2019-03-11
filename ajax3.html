@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AJAX3 - Github external API</title>
+    <style>
+        .user {
+            display: flex;
+            background: #f4f4f4;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .user ul {
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="users">
+
+
+    </div>
+    
+    <div id="text"></div>
+
+    <script>
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('GET','https://api.github.com/users', true);
+
+        xhr.onerror = function() {
+            console.log('An error occured...');
+        }
+
+        xhr.onload = function() {
+            if(this.status==200) {
+                console.log(this.responseText);
+                var users = JSON.parse(this.responseText);
+
+                var o = '';
+                for (var i in users) {
+                    o += '<div class="user">' + 
+                        '<img src="' + users[i].avatar_url + '" width=70 height=70>' +
+                        '<ul>' +
+                        '<li>Login: ' + users[i].login + '('+ users[i].id + ')</li>'+
+                        '<li>URL: ' + users[i].url + '</li>' +
+                        '</ul>' +
+                        '</div>'
+                }
+
+                document.getElementById('users').innerHTML = o;
+
+            } else if (this.status==404) {
+                console.log('Endpoint not found...')
+                document.getElementById('text').innerHTML = '<h3> '+
+                    'Endpoint not found... ' + '</h3>';
+            }
+        }
+
+        xhr.send();
+
+    </script>
+    
+</body>
+</html>

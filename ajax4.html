@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AJAX4 - Ajax and PHP</title>
+</head>
+<body>
+    <h1>Get data from PHP</h1>
+    <button id="button">Get PHP Output</button>
+
+    <h1>PHP GET Form</h1>
+    <form action="process.php" method="GET">
+    <input type="text" name="name1">
+    <input type="submit" value="submit">
+    </form>
+
+    <h1>AJAX GET Form</h1>
+    <form id="getForm">
+    <input type="text" name="name2" id="name2">
+    <input type="submit" value="submit">
+    </form>
+
+    <h1>PHP POST Form</h1>
+    <form action="process.php" method="POST">
+    <input type="text" name="name2">
+    <input type="submit" value="submit">
+    </form>
+
+    <h1>AJAX POST Form</h1>
+    <form id="postForm">
+    <input type="text" name="name4" id="name4">
+    <input type="submit" value="submit">
+    </form>
+    
+    <script>
+
+        document.getElementById('button').addEventListener('click',getPHP);
+        document.getElementById('getForm').addEventListener('submit',getAJAXName);
+        document.getElementById('postForm').addEventListener('submit',postAJAXName);
+
+        // Code for button
+        function getPHP() {
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET','process.php?name=Dome',true);
+
+            xhr.onload = function() {
+                console.log(this.responseText);
+            }
+            xhr.send();
+        }
+
+        // Code for AJAX GET Form
+        function getAJAXName(e) {
+            e.preventDefault();     // stop initial submit
+            
+            var xhr = new XMLHttpRequest();
+            var name = document.getElementById('name2').value;
+
+            xhr.open('GET','process.php?name1='+name,true);
+
+            xhr.onload = function() {
+                console.log(this.responseText);
+            }
+            xhr.send();
+        }
+
+        // Code for AJAX POST Form
+        function postAJAXName(e) {
+            e.preventDefault();     // stop initial submit
+            
+            var xhr = new XMLHttpRequest();
+            var name = document.getElementById('name4').value;
+            var params = "name2="+name;
+
+            xhr.open('POST','process.php',true);
+            xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+
+            xhr.onload = function() {
+                console.log(this.responseText);
+            }
+            xhr.send(params);
+
+        }
+
+    </script>
+</body>
+</html>

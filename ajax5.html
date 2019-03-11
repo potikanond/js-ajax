@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ajax5 - Fetch from PHP MySQL</title>
+</head>
+<body>
+
+    <form id="getForm">
+        <input type="text" name="name" id="name">
+        <input type="submit" value="add user">
+    </form>
+
+    <br><br>
+    
+    <h1>Users</h1> 
+    <button id="button2">Get Users</button>
+    <div id="users"></div>
+
+    <script>
+        document.getElementById('getForm').addEventListener('submit',getName);
+        document.getElementById('button2').addEventListener('click',loadUsers);
+
+        function getName(e) {
+            e.preventDefault();     // stop initial submit
+
+            var xhr = new XMLHttpRequest();
+            var name = document.getElementById('name').value;
+            var params = "name="+name;
+
+            xhr.open('POST','insertdb.php',true);
+            xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+
+            xhr.onload = function() {
+                console.log(this.responseText);
+                loadUsers();
+            }
+            xhr.send(params);
+        }
+
+        function loadUsers() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET','selectdb.php',true);
+
+            xhr.onload = function() {
+                if(this.status == 200) {
+                    // console.log(this.responseText);
+                    var users = JSON.parse(this.responseText);
+
+                    // could use ES6 here!!!
+                    var o = '';
+                    for(var i in users) {
+                        o += '<ul>' +
+                            '<li>ID: ' + users[i].id + '</li>' +
+                            '<li>Name: ' + users[i].u_name + '</li>' +
+                            '</ul>';
+                    }
+                
+                    document.getElementById('users').innerHTML = o;
+                }
+            }
+
+            xhr.send();
+        }
+    </script>
+    
+</body>
+</html>
